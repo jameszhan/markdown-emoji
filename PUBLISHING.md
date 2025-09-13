@@ -2,10 +2,9 @@
 
 ## Prerequisites
 - npm account (https://www.npmjs.com/signup), email verified, 2FA recommended.
-- Ensure `package.json` name uses your actual npm scope (usually your npm username):
-  - Example: `"name": "@jameszhan/markdown-emoji"`
-  - Current: `@james_zhan/markdown-emoji` — change if your npm username differs.
-- Optional: update `repository`, `homepage`, `bugs` to point to your GitHub repo.
+- Ensure `package.json` name uses your actual npm scope (your npm username):
+  - Current: `@james_zhan/markdown-emoji` (matches your npm username)
+- `repository`/`homepage`/`bugs` already point to https://github.com/jameszhan/markdown-emoji
 
 ## Steps
 1) Login to npm via pnpm (once per machine)
@@ -42,4 +41,4 @@ pnpm add @<your-scope>/markdown-emoji
 </script>
 ```
 - If you need CJS compatibility, consider publishing a dual build in a future iteration.
-
+- Default emoji data and aliases are included in `src/data/`. No sync step is required.

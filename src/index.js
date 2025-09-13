@@ -53,12 +53,13 @@ export function normalizeAliases(data){
   if (!data) return out;
   if (Array.isArray(data)){
     for (const it of data){
-      if (it && typeof it.alias === 'string' && typeof it.to === 'string') out[it.alias] = it.to;
+      if (it && typeof it.alias === 'string' && typeof it.to === 'string')
+        addAliasMapping(out, it.alias, it.to);
     }
     return out;
   }
   if (data && typeof data === 'object'){
-    for (const [k, v] of Object.entries(data)) if (typeof v === 'string') out[k] = v;
+    for (const [k, v] of Object.entries(data)) if (typeof v === 'string') addAliasMapping(out, k, v);
   }
   return out;
 }
@@ -94,18 +95,25 @@ export function applyEmojiShortcodes(root, {emojiMap, aliases = {}, skipMath = t
   while (walker.nextNode()) nodes.push(walker.currentNode);
   for (const n of nodes){
     n.nodeValue = n.nodeValue.replace(re, (m) => {
-      const canonical = aliases[m] || m;
-      return emojiMap[canonical] || emojiMap[m] || emojiMap[m.slice(1,-1)] || m;
+      const key = ensureColon(m);
+      const canonical = aliases[key] || aliases[key.slice(1,-1)] || m;
+      const ckey = ensureColon(canonical);
+      return emojiMap[ckey] || emojiMap[ckey.slice(1,-1)] || emojiMap[m] || emojiMap[m.slice(1,-1)] || m;
     });
   }
 }
 
 // Packaged defaults (async import of JSON, works in modern bundlers/browsers)
 export async function loadDefaultEmojiData(){
-  try{ const mod = await import('./data/emoji-unicodes.json', { assert: { type: 'json' } }); return mod.default; }catch{ return {}; }
+  // Try JSON import assertion (modern browsers/bundlers), fallback to fetch
+  try{ const mod = await import('./data/emoji-unicodes.json', { assert: { type: 'json' } }); return mod.default; }catch{}
+  try{ const url = new URL('./data/emoji-unicodes.json', import.meta.url); const r = await fetch(url); if (r.ok) return await r.json(); }catch{}
+  return {};
 }
 export async function loadDefaultAliasesData(){
-  try{ const mod = await import('./data/emoji-aliases.json', { assert: { type: 'json' } }); return mod.default; }catch{ return {}; }
+  try{ const mod = await import('./data/emoji-aliases.json', { assert: { type: 'json' } }); return mod.default; }catch{}
+  try{ const url = new URL('./data/emoji-aliases.json', import.meta.url); const r = await fetch(url); if (r.ok) return await r.json(); }catch{}
+  return {};
 }
 export async function loadDefaultEmojiMap(){
   const data = await loadDefaultEmojiData();
@@ -127,4 +135,19 @@ function addMapping(map, key, value){
 
 function unicodeSeqToChar(seq){
   return seq.split('-').map(h => String.fromCodePoint(parseInt(h, 16))).join('');
+}
+
+function addAliasMapping(map, alias, target){
+  const ak = ensureColon(alias);
+  const tv = ensureColon(target);
+  map[ak] = tv;
+  map[ak.slice(1,-1)] = tv;
+}
+
+function ensureColon(s){
+  if (!s) return s;
+  const hasStart = s[0] === ':';
+  const hasEnd = s[s.length-1] === ':';
+  if (hasStart && hasEnd) return s;
+  return `:${String(s).replace(/^:+|:+$/g,'')}:`;
 }
