@@ -1,0 +1,45 @@
+# Publishing @scope/markdown-emoji with pnpm
+
+## Prerequisites
+- npm account (https://www.npmjs.com/signup), email verified, 2FA recommended.
+- Ensure `package.json` name uses your actual npm scope (usually your npm username):
+  - Example: `"name": "@jameszhan/markdown-emoji"`
+  - Current: `@james_zhan/markdown-emoji` — change if your npm username differs.
+- Optional: update `repository`, `homepage`, `bugs` to point to your GitHub repo.
+
+## Steps
+1) Login to npm via pnpm (once per machine)
+```
+pnpm npm login
+pnpm npm whoami
+```
+
+2) Dry run (optional)
+```
+cd packages/markdown-emoji
+pnpm publish --dry-run
+```
+
+3) Publish (scoped packages default to restricted; set public explicitly)
+```
+cd packages/markdown-emoji
+pnpm publish --access public
+```
+
+4) Install and try in a fresh project
+```
+pnpm add @<your-scope>/markdown-emoji
+```
+
+## Versioning
+- Bump `version` in `package.json` for subsequent publishes (e.g., 0.1.1 → 0.1.2).
+
+## Notes
+- This package ships ESM source. For direct CDN usage (no bundler), you can import from a CDN path, e.g.:
+```
+<script type="module">
+  import { applyEmojiShortcodes } from 'https://unpkg.com/@<your-scope>/markdown-emoji@0.1.0/src/index.js'
+</script>
+```
+- If you need CJS compatibility, consider publishing a dual build in a future iteration.
+

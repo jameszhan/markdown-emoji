@@ -2,6 +2,17 @@
   "name": "@james_zhan/markdown-emoji",
   "version": "0.1.0",
   "description": "Lightweight DOM post-processor to replace :shortcode: with emoji, with alias support and safe skipping for code/math.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jameszhan/markdown-emoji.git"
+  },
+  "homepage": "https://github.com/jameszhan/markdown-emoji#readme",
+  "bugs": {
+    "url": "https://github.com/jameszhan/markdown-emoji/issues"
+  },
+  "contributors": [
+    "James Zhan <zhiqiangzhan@gmail.com>"
+  ],
   "type": "module",
   "main": "src/index.js",
   "exports": {
@@ -12,6 +23,10 @@
   "files": [
     "src"
   ],
+  "scripts": {
+    "sync:data": "node scripts/sync-data.mjs",
+    "prepublishOnly": "node scripts/sync-data.mjs"
+  },
   "keywords": [
     "markdown",
     "emoji",
@@ -27,4 +42,3 @@
     "access": "public"
   }
 }
-

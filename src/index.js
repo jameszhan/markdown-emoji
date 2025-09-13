@@ -100,6 +100,18 @@ export function applyEmojiShortcodes(root, {emojiMap, aliases = {}, skipMath = t
   }
 }
 
+// Packaged defaults (async import of JSON, works in modern bundlers/browsers)
+export async function loadDefaultEmojiData(){
+  try{ const mod = await import('./data/emoji-unicodes.json', { assert: { type: 'json' } }); return mod.default; }catch{ return {}; }
+}
+export async function loadDefaultAliasesData(){
+  try{ const mod = await import('./data/emoji-aliases.json', { assert: { type: 'json' } }); return mod.default; }catch{ return {}; }
+}
+export async function loadDefaultEmojiMap(){
+  const data = await loadDefaultEmojiData();
+  return normalizeEmojiData(data);
+}
+
 // helpers
 function shouldSkipBySelector(el, selectors){
   if (!selectors.length) return false;
@@ -116,4 +128,3 @@ function addMapping(map, key, value){
 function unicodeSeqToChar(seq){
   return seq.split('-').map(h => String.fromCodePoint(parseInt(h, 16))).join('');
 }
-

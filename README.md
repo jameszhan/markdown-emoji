@@ -6,6 +6,7 @@ DOM post-processor to replace `:shortcode:` with emoji characters, with alias su
 - Optional alias map (e.g., `":hankey:"` → `":poop:"`)
 - Skips code/pre/kbd/script/style and MathJax output (`.math-block`, `MJX-*`)
 - Works with any Markdown renderer; typical flow: Markdown → HTML → DOMPurify → applyEmojiShortcodes
+- Ships with default emoji data (code points) and aliases inside the package (`src/data/*.json`), so users don't need to curate data.
 
 ## Install
 
@@ -20,20 +21,39 @@ npm i @james_zhan/markdown-emoji
 ```html
 <div id="root"></div>
 <script type="module">
-  import { applyEmojiShortcodes, normalizeEmojiData, normalizeAliases } from '@james_zhan/markdown-emoji'
+  import {
+    applyEmojiShortcodes,
+    normalizeEmojiData,
+    normalizeAliases,
+    loadDefaultEmojiMap,
+    loadDefaultAliasesData
+  } from '@james_zhan/markdown-emoji'
 
   // 1) Obtain HTML (e.g., via marked) and inject to DOM
   const root = document.getElementById('root')
   root.innerHTML = `<p>Hello :smile: \\`code :smile: not replaced\\`</p>`
 
-  // 2) Load/normalize emoji mapping
-  const data = { ':smile:': { unicode: '1f604' } } // code-point object form
-  const emojiMap = normalizeEmojiData(data)
-  const aliases = normalizeAliases({ ':hankey:': ':poop:' })
+  // 2) Use packaged defaults (async)
+  const emojiMap = await loadDefaultEmojiMap()
+  const aliases = normalizeAliases(await loadDefaultAliasesData())
 
   // 3) Apply replacement on the DOM
   applyEmojiShortcodes(root, { emojiMap, aliases })
 </script>
+```
+
+### Using shipped JSON files directly
+
+If your toolchain doesn't support JSON import assertions, you can fetch the JSON shipped in the package and normalize it:
+
+```js
+import { normalizeEmojiData, normalizeAliases } from '@james_zhan/markdown-emoji'
+
+const emojiResp = await fetch('/node_modules/@james_zhan/markdown-emoji/src/data/emoji-unicodes.json')
+const emojiMap = normalizeEmojiData(await emojiResp.json())
+
+const aliasResp = await fetch('/node_modules/@james_zhan/markdown-emoji/src/data/emoji-aliases.json')
+const aliases = normalizeAliases(await aliasResp.json())
 ```
 
 ## API
@@ -58,5 +78,4 @@ npm i @james_zhan/markdown-emoji
 
 ## License
 
-Unlicensed in this repository sample; set your preferred license before publishing.
-
+MIT
