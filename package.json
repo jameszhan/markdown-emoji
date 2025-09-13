@@ -1,0 +1,30 @@
+{
+  "name": "@james_zhan/markdown-emoji",
+  "version": "0.1.0",
+  "description": "Lightweight DOM post-processor to replace :shortcode: with emoji, with alias support and safe skipping for code/math.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "types": "src/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "markdown",
+    "emoji",
+    "shortcode",
+    "dom",
+    "postprocess",
+    "mathjax",
+    "gfm"
+  ],
+  "author": "James Zhan",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
+
