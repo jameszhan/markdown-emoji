@@ -15,19 +15,20 @@ pnpm npm whoami
 
 2) Dry run (optional)
 ```
-cd packages/markdown-emoji
+cd markdown-emoji
 pnpm publish --dry-run
 ```
 
 3) Publish (scoped packages default to restricted; set public explicitly)
 ```
-cd packages/markdown-emoji
+cd markdown-emoji
+pnpm version patch
 pnpm publish --access public
 ```
 
 4) Install and try in a fresh project
 ```
-pnpm add @<your-scope>/markdown-emoji
+pnpm add @james_zhan/markdown-emoji
 ```
 
 ## Versioning
@@ -37,7 +38,7 @@ pnpm add @<your-scope>/markdown-emoji
 - This package ships ESM source. For direct CDN usage (no bundler), you can import from a CDN path, e.g.:
 ```
 <script type="module">
-  import { applyEmojiShortcodes } from 'https://unpkg.com/@<your-scope>/markdown-emoji@0.1.0/src/index.js'
+  import { applyEmojiShortcodes } from 'https://unpkg.com/@james_zhan/markdown-emoji@0.1.3/src/index.js'
 </script>
 ```
 - If you need CJS compatibility, consider publishing a dual build in a future iteration.
