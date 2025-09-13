@@ -1,6 +1,6 @@
 {
   "name": "@james_zhan/markdown-emoji",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Lightweight DOM post-processor to replace :shortcode: with emoji, with alias support and safe skipping for code/math.",
   "repository": {
     "type": "git",
@@ -23,8 +23,7 @@
   "files": [
     "src"
   ],
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [
     "markdown",
     "emoji",
